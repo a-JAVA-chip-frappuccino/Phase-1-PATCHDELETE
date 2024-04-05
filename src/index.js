@@ -1,3 +1,14 @@
+/* ----------------------------------------------------- 
+    VOCABULARY TERMS
+----------------------------------------------------- */
+
+/*
+
+    - PATCH request: a `fetch` call to update existing data
+    - DELETE request: a `fetch` call to remove existing data
+
+*/
+
 fetch("http://localhost:3000/characters")
     .then((resp) => resp.json())
     .then((data) => renderCharacters(data))
@@ -25,6 +36,37 @@ function renderCharacters(charArr) {
 
         li.appendChild(p)
         li.appendChild(img)
+
+        
+        /* ----------------------------------------------------- 
+            PATCH REQUEST
+        ----------------------------------------------------- */
+
+        const form = document.createElement('form')
+        const btn = document.createElement('button')
+        const input = document.createElement('input')
+        input.placeholder = "character name"
+        input.name = "name"
+        btn.innerText = "Submit"
+
+        form.append(input, btn)
+        // form.appendChild(input)
+        // form.appendChild(btn)
+
+        
+
+        li.appendChild(form)
+
+        /* ----------------------------------------------------- 
+            DELETE REQUEST
+        ----------------------------------------------------- */
+
+        const btn2 = document.createElement('button')
+        btn2.innerText = "Delete"
+
+        li.appendChild(btn2)
+
+        
 
         ul.append(li)
         
