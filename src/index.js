@@ -53,7 +53,37 @@ function renderCharacters(charArr) {
         // form.appendChild(input)
         // form.appendChild(btn)
 
-        
+        form.addEventListener('submit', (e) => handleUpdateChar(e))
+
+        function handleUpdateChar(e) {
+            e.preventDefault()
+
+            const newCharObj = {
+                name : e.target.name.value // updates just name key:value pair
+            }
+
+            // fires PATCH to individual object
+            fetch("http://localhost:3000/characters/" + charObj.id, {
+                method : 'PATCH',
+                headers : {
+                    'Content-type' : 'application/json'
+                },
+                body : JSON.stringify(newCharObj)
+            })
+                .then((resp) => resp.json())
+                .then((data) => {
+                    const newCharArr = charArr.map((eachCharObj) => {
+                        if (eachCharObj.id !== charObj.id) {
+                            return eachCharObj
+                        }
+                        else {
+                            return data
+                        }
+                    })
+                    renderCharacters(newCharArr)
+                }) // immediately rerenders new array with updated object
+                // .then((data) => renderCharacters(charArr.map((eachCharObj) => eachCharObj.id !== charObj.id ? eachCharObj : data)))
+        }
 
         li.appendChild(form)
 
@@ -66,7 +96,27 @@ function renderCharacters(charArr) {
 
         li.appendChild(btn2)
 
-        
+        btn2.addEventListener('click', handleDeleteChar)
+
+        // fires DELETE to individual object
+        function handleDeleteChar() {
+            fetch(`http://localhost:3000/characters/${charObj.id}`, {
+                method : 'DELETE'
+            })
+                .then((resp) => resp.json())
+                .then((data) => {
+                    const newCharArr = charArr.filter((eachCharObj) => {
+                        if (eachCharObj.id !== data.id) {
+                            return true
+                        }
+                        else {
+                            return false
+                        }
+                    })
+                    renderCharacters(newCharArr)
+                }) // immediately rerenders new array without removed object
+                // .then((data) => renderCharacters(charArr.filter((eachCharObj) => eachCharObj.id !== data.id)))
+        }
 
         ul.append(li)
         
